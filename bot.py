@@ -1,10 +1,11 @@
 import logging
 import sys
-from io import StringIO
 import contextlib
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from telegram import ParseMode
+from io import StringIO
 from collections import defaultdict
+
+from telegram.ext import Updater, CommandHandler
+from telegram import ParseMode
 
 log = logging.getLogger(__name__)
 logging.basicConfig(
