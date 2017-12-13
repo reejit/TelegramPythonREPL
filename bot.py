@@ -24,7 +24,7 @@ def redirected_stdout():
     old = sys.stdout
     stdout = StringIO()
     sys.stdout = stdout
-    yield stdout.getvalue()
+    yield stdout
     sys.stdout = old
 
 
@@ -61,7 +61,7 @@ def do(func, bot, update):
     try:
         with redirected_stdout() as stdout:
             func_return = func(content, globals(), memory[chat_id])
-            func_stdout = stdout if stdout != '' else None
+            func_stdout = stdout.getvalue() if stdout.getvalue() != '' else None
 
             if func_return is not None:
                 output += str(func_return)
