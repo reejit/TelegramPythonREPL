@@ -7,7 +7,6 @@ from telegram.ext import Updater, CommandHandler
 from telegram.error import TimedOut, NetworkError
 from telegram import ParseMode
 
-
 log = logging.getLogger(__name__)
 logging.basicConfig(
     level=logging.INFO,
@@ -16,7 +15,12 @@ logging.basicConfig(
     filemode='w'
 )
 
-token = "CHANGE ME"
+try:
+    with open('/run/secrets/pybot.token', 'r') as f:
+        token = f.readline()
+except FileNotFoundError:
+    with open('pybot.token', 'r') as f:
+        token = f.readline()
 
 namespaces = {}
 
@@ -62,17 +66,16 @@ def execute(bot, update):
 
 def do(func, bot, update):
     log_input(update)
-    content = update.message.text[6:]
+    content = update.message.text.split(' ', 1)[-1]
 
     output = ""
 
     try:
         with redirected_stdout() as stdout:
             func_return = func(content, namespace_of(update.message.chat_id))
-            func_stdout = stdout.getvalue() if stdout.getvalue() != '' else None
 
-            if func_stdout is not None:
-                output += str(func_stdout) + "\n"
+            if stdout.getvalue():
+                output += str(stdout.getvalue()) + "\n"
 
             if func_return is not None:
                 output += str(func_return)
@@ -108,8 +111,8 @@ def error_callback(bot, update, error):
 def main():
     log.info("Initializing bot")
     updater = Updater(token)
-    updater.dispatcher.add_handler(CommandHandler('eval', evaluate))
-    updater.dispatcher.add_handler(CommandHandler('exec', execute))
+    updater.dispatcher.add_handler(CommandHandler(('e', 'ev', 'eva', 'eval'), evaluate))
+    updater.dispatcher.add_handler(CommandHandler(('x', 'ex', 'exe', 'exec'), execute))
     updater.dispatcher.add_handler(CommandHandler('clear', clear))
     updater.dispatcher.add_error_handler(error_callback)
     updater.start_polling()
