@@ -4,6 +4,7 @@ pipeline {
     stage('Print hello world') {
       steps {
         echo 'Hello world!'
+        sh 'ls -lat'
       }
     }
     stage('Build') {
