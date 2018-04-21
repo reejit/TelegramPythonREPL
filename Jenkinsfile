@@ -6,5 +6,10 @@ pipeline {
         echo 'Hello world!'
       }
     }
+    stage('Build') {
+      steps {
+        sh 'docker build . -t pybot'
+      }
+    }
   }
 }
