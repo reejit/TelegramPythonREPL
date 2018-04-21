@@ -5,11 +5,7 @@ pipeline {
       steps {
         echo 'Hello world!'
         sh 'ls -lat'
-      }
-    }
-    stage('Build') {
-      steps {
-        sh 'docker build . -t pybot'
+        sh 'pwd'
       }
     }
   }
