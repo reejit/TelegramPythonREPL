@@ -1,6 +1,6 @@
 import logging
 import sys
-import contextlib
+from contextlib import contextmanager
 from io import StringIO
 
 from telegram.ext import Updater, CommandHandler
@@ -32,7 +32,7 @@ def namespace_of(chat):
     return namespaces[chat]
 
 
-@contextlib.contextmanager
+@contextmanager
 def redirected_stdout():
     old = sys.stdout
     stdout = StringIO()
