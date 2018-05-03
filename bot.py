@@ -11,8 +11,7 @@ log = logging.getLogger(__name__)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)-15s %(name)s %(message)s',
-    filename='bot.log',
-    filemode='w'
+    stream=sys.stdout
 )
 
 try:
@@ -21,6 +20,7 @@ try:
 except FileNotFoundError:
     with open('pybot.token', 'r') as f:
         token = f.readline()
+
 
 namespaces = {}
 
