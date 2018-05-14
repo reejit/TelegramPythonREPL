@@ -13,5 +13,10 @@ pipeline {
         sh 'pwd'
       }
     }
+    stage('asd') {
+      steps {
+        sh 'whoami'
+      }
+    }
   }
 }
