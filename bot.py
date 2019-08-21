@@ -1,5 +1,6 @@
 import logging
 import sys
+import os
 from contextlib import contextmanager
 from io import StringIO
 
@@ -13,13 +14,6 @@ logging.basicConfig(
     format='%(asctime)-15s %(name)s %(message)s',
     stream=sys.stdout
 )
-
-try:
-    with open('/run/secrets/pybot.token', 'r') as f:
-        token = f.readline()
-except FileNotFoundError:
-    with open('pybot.token', 'r') as f:
-        token = f.readline()
 
 
 namespaces = {}
@@ -108,8 +102,9 @@ def error_callback(bot, update, error):
         log.info(error, exc_info=True)
 
 
-def main():
+if __name__ == '__main__':
     log.info("Initializing bot")
+    token = os.environ.get("BOT_TOKEN")
     updater = Updater(token)
     updater.dispatcher.add_handler(CommandHandler(('e', 'ev', 'eva', 'eval'), evaluate))
     updater.dispatcher.add_handler(CommandHandler(('x', 'ex', 'exe', 'exec'), execute))
@@ -119,7 +114,3 @@ def main():
 
     log.info("Bot initialized")
     updater.idle()
-
-
-if __name__ == '__main__':
-    main()
